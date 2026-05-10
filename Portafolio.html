@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  PORTAFOLIO — Fernando Zamudio                               ║
+  ║  Estructura general:                                         ║
+  ║    1. <head>      → metadatos, fuentes y hojas de estilo     ║
+  ║    2. <nav>       → barra de navegación fija                 ║
+  ║    3. #inicio     → sección Hero (presentación principal)    ║
+  ║    4. #acerca     → sección Acerca de                        ║
+  ║    5. #skills     → sección Stack tecnológico                ║
+  ║    6. #experiencia→ sección Experiencia laboral              ║
+  ║    7. #educacion  → sección Formación académica              ║
+  ║    8. #proyectos  → sección Proyectos destacados             ║
+  ║    9. #contacto   → sección Formulario de contacto           ║
+  ║   10. <footer>    → pie de página con navegación y redes     ║
+  ║   11. <script>    → enlace al archivo de lógica JS           ║
+  ╚══════════════════════════════════════════════════════════════╝
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio — Desarrollador Backend</title>
+
+  <!--
+    FUENTES EXTERNAS (Google Fonts)
+    Se cargan tres familias tipográficas:
+    · JetBrains Mono  → textos técnicos, labels, código
+    · Syne            → texto general del cuerpo
+    · Playfair Display→ títulos principales (hero, secciones, footer)
+  -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet"/>
+
+  <!--
+    DEVICONS (CDN)
+    Biblioteca de iconos SVG para tecnologías de desarrollo.
+    Se usa en la sección Skills con clases como "devicon-java-plain".
+  -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"/>
+
+  <!-- HOJA DE ESTILOS LOCAL — contiene todos los estilos del proyecto -->
+  <link href="./style.css" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════
+     NAVBAR — Barra de navegación fija
+     · Siempre visible en la parte superior (position: fixed)
+     · Los enlaces anclan a cada sección mediante href="#id"
+     · Al hacer scroll el JS le agrega la clase "scrolled"
+       para mostrar el borde inferior
+     · El botón .hamburger aparece en pantallas pequeñas
+       y despliega el menú vertical
+════════════════════════════════════════════════════════ -->
+<nav id="navbar">
+  <!-- Lista de enlaces de navegación -->
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#inicio">Inicio</a></li>
+    <li><a href="#acerca">Acerca de</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experiencia">Experiencia</a></li>
+    <li><a href="#educacion">Educación</a></li>
+    <li><a href="#proyectos">Proyectos</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+
+  <!-- Botón hamburguesa: visible sólo en móvil (display: none en desktop) -->
+  <button class="hamburger" id="hamburger" aria-label="Menú">
+    <span></span><!-- línea 1 del ícono -->
+    <span></span><!-- línea 2 del ícono -->
+    <span></span><!-- línea 3 del ícono -->
+  </button>
+</nav>
+
+
+<!-- ════════════════════════════════════════════════════════
+     HERO (#inicio) — Sección de presentación principal
+     · Ocupa el 100% del alto de la pantalla (min-height: 100vh)
+     · Tiene un fondo degradado teal definido en --grad-hero
+     · .glow-1/2/3: círculos con blur para el efecto de luz ambiental
+     · .hero-inner: grid de dos columnas (texto | foto)
+     · El texto se anima con fadeUp al cargar la página
+     · La foto se muestra dentro de .photo-frame
+     · .scroll-indicator: indicador animado de "bajar la página"
+════════════════════════════════════════════════════════ -->
+<section id="inicio">
+
+  <!-- Efectos de luz ambiental (círculos borrosos posicionados) -->
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+  <div class="glow glow-3"></div>
+
+  <!-- Contenedor principal del hero: divide texto y foto en dos columnas -->
+  <div class="hero-inner">
+
+    <!-- COLUMNA IZQUIERDA: nombre, descripción y botones de acción -->
+    <div class="hero-text">
+      <!--
+        Título principal con el nombre.
+        "Fernando" usa el color blanco (--heading),
+        "Zamudio" usa .accent-word para el color teal claro (--accent2).
+      -->
+      <h1 class="hero-name">Fernando <span class="accent-word">Zamudio</span></h1>
+
+      <!-- Descripción breve-->
+      <p class="hero-desc">
+        Hola, soy un ingeniero apasionado por crear sistemas escalables y soluciones
+        eficientes. Te invito a conocer más sobre mi trayectoria y proyectos en el
+        desarrollo de software.
+      </p>
+
+      <!-- Botones de llamada a la acción -->
+      <div class="hero-btns">
+        <!-- Botón primario: lleva a la sección de proyectos -->
+        <a href="#proyectos" class="btn-primary">Ver proyectos</a>
+        <!-- Botón secundario (outline): lleva al formulario de contacto -->
+        <a href="#contacto" class="btn-outline">Contactar</a>
+      </div>
+    </div>
+
+    <!-- COLUMNA DERECHA: Mi foto -->
+    <div class="hero-photo">
+      <!--
+        Marco de la fotografía.
+        · Si <img> existe, oculta automáticamente los elementos
+          de placeholder (.ph-icon y .ph-text) mediante CSS.
+        · object-fit: cover asegura que la imagen llene el marco
+          sin deformarse.
+      -->
+      <div class="photo-frame">
+        <img src="./Imagenes/WhatsApp Image 2026-05-04 at 11.03.15 AM.jpeg"
+             alt="Foto de Fernando Zamudio">
+      </div>
+    </div>
+
+  </div><!-- /hero-inner -->
+
+  <!-- Indicador animado de scroll: pequeño ratón con punto que baja -->
+  <div class="scroll-indicator">
+    <div class="mouse"></div>
+    SCROLL
+  </div>
+
+</section><!-- /#inicio -->
+
+
+<!-- ════════════════════════════════════════════════════════
+     ACERCA DE (#acerca) — Presentación personal
+     · Fondo: --surface (teal oscuro medio)
+     · Muestra tres párrafos de texto descriptivo
+     · .reveal: clase que activa la animación de entrada
+       cuando el elemento entra en el viewport (ver script.js)
+════════════════════════════════════════════════════════ -->
+<section id="acerca">
+  <div class="container">
+
+    <!-- Encabezado de sección con label numerado, título y divisor -->
+    <div class="reveal">
+      <p class="section-label">// 01. ACERCA DE</p>
+      <h2 class="section-title">¿Quién soy?</h2>
+      <div class="section-divider"></div><!-- línea decorativa degradada -->
+    </div>
+
+    <!-- Bloque de texto: tres párrafos con la presentación personal -->
+    <div class="about-text reveal">
+      <p>Soy desarrollador Java Full Stack Junior enfocado en construir aplicaciones
+         completas, desde servicios backend con Spring Boot hasta interfaces dinámicas
+         en el frontend.</p>
+      <p>Mi formación como ingeniero mecánico y mi experiencia en la gestión de proyectos
+         me han brindado una fuerte orientación a la precisión y el detalle, enfoque que
+         hoy aplico directamente en el desarrollo de software.</p>
+      <p>Busco integrarme a un equipo de trabajo donde pueda aportar soluciones eficientes,
+         adaptarme a entornos de trabajo ágiles bajo metodologías como Scrum y contribuir
+         al desarrollo de proyectos mediante un enfoque analítico, orientado a resultados
+         y mejora continua.</p>
+    </div>
+
+  </div>
+</section><!-- /#acerca -->
+
+
+<!-- ════════════════════════════════════════════════════════
+     SKILLS (#skills) — Stack tecnológico con iconos Devicon
+     · Fondo: --bg (más oscuro para contrastar con #acerca)
+     · Organizado en tres grupos: Backend / Frontend / Herramientas
+     · Cada grupo tiene:
+         .skill-group-title → label del grupo con línea decorativa
+         .devicon-grid       → grid responsive de tarjetas
+         .di-card            → tarjeta individual con ícono y nombre
+     · Los iconos son de la biblioteca Devicon (cargada en <head>)
+     · La clase "colored" aplica los colores oficiales de cada tech
+════════════════════════════════════════════════════════ -->
+<section id="skills">
+  <div class="container">
+
+    <!-- Encabezado de sección -->
+    <div class="reveal">
+      <p class="section-label">// 02. SKILLS</p>
+      <h2 class="section-title">Stack tecnológico</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <!-- Contenedor de los tres grupos de skills -->
+    <div class="skill-categories">
+
+      <!-- GRUPO 1: Tecnologías Backend -->
+      <div class="reveal">
+        <p class="skill-group-title">Backend</p>
+        <div class="devicon-grid">
+          <div class="di-card"><i class="devicon-java-plain colored"></i><span>Java</span></div>
+          <div class="di-card"><i class="devicon-mysql-plain colored"></i><span>MySQL</span></div>
+          <div class="di-card"><i class="devicon-python-plain colored"></i><span>Python</span></div>
+          <div class="di-card"><i class="devicon-nodejs-plain colored"></i><span>Node.js</span></div>
+          <div class="di-card"><i class="devicon-spring-plain colored"></i><span>Spring Boot</span></div>
+        </div>
+      </div>
+
+      <!-- GRUPO 2: Tecnologías Frontend -->
+      <div class="reveal">
+        <p class="skill-group-title">Frontend</p>
+        <div class="devicon-grid">
+          <div class="di-card"><i class="devicon-css3-plain colored"></i><span>CSS</span></div>
+          <div class="di-card"><i class="devicon-html5-plain colored"></i><span>HTML</span></div>
+          <div class="di-card"><i class="devicon-javascript-plain colored"></i><span>JavaScript</span></div>
+          <div class="di-card"><i class="devicon-bootstrap-plain colored"></i><span>Bootstrap</span></div>
+          <div class="di-card"><i class="devicon-react-original colored"></i><span>React</span></div>
+        </div>
+      </div>
+
+      <!-- GRUPO 3: Herramientas de desarrollo -->
+      <div class="reveal">
+        <p class="skill-group-title">Herramientas</p>
+        <div class="devicon-grid">
+          <div class="di-card"><i class="devicon-git-plain colored"></i><span>Git</span></div>
+          <!-- GitHub no tiene color oficial, se usa el color de texto base -->
+          <div class="di-card"><i class="devicon-github-original" style="color:var(--text)"></i><span>GitHub</span></div>
+          <div class="di-card"><i class="devicon-vscode-plain colored"></i><span>VS Code</span></div>
+          <div class="di-card"><i class="devicon-intellij-plain colored"></i><span>IntelliJ</span></div>
+        </div>
+      </div>
+
+    </div><!-- /skill-categories -->
+  </div>
+</section><!-- /#skills -->
+
+
+<!-- ════════════════════════════════════════════════════════
+     EXPERIENCIA (#experiencia) — Historial laboral en timeline
+     · Fondo: --surface con bordes superior e inferior
+     · .timeline: contenedor con línea vertical decorativa izquierda
+     · Cada .timeline-item contiene:
+         .timeline-dot     → punto circular sobre la línea
+         .timeline-date    → rango de fechas en mono
+         .timeline-role    → nombre del puesto
+         .timeline-company → empresa y ciudad
+         p.timeline-desc   → descripción de responsabilidades
+         .tag-list         → chips con tecnologías/herramientas usadas
+════════════════════════════════════════════════════════ -->
+<section id="experiencia">
+  <div class="container">
+
+    <!-- Encabezado de sección -->
+    <div class="reveal">
+      <p class="section-label">// 03. EXPERIENCIA</p>
+      <h2 class="section-title">Trayectoria profesional</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <!-- Timeline vertical de experiencias -->
+    <div class="timeline">
+
+      <!-- Experiencia 1: más reciente -->
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div><!-- marcador en la línea -->
+        <div class="timeline-date">SEPTIEMBRE 2025 - FEBRERO 2026</div>
+        <div class="timeline-role">Auxiliar de operaciones y gestión vehicular</div>
+        <div class="timeline-company">TRANSPORTE ARMOCAFE · Ciudad de México</div>
+        <p class="timeline-desc">
+          Coordiné procesos de adquisición y venta de unidades, además de ejecutar planes
+          logísticos para la distribución y recolección, optimizando el uso de recursos y
+          reduciendo errores en las entregas.
+        </p>
+        <!-- Chips de herramientas/tecnologías usadas en este rol -->
+        <div class="tag-list">
+          <span class="tag">Excel</span>
+          <span class="tag">Efecticard</span>
+          <span class="tag">PASE</span>
+        </div>
+      </div>
+
+      <!-- Experiencia 2 -->
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">AGOSTO 2024 - JULIO 2025</div>
+        <div class="timeline-role">Auxiliar proyectista</div>
+        <div class="timeline-company">Aire y clima especializado · Ciudad de México</div>
+        <p class="timeline-desc">
+          Analicé cálculos de cargas térmicas para distintos sistemas bajo lineamientos
+          ASHRAE, asegurando su viabilidad, y coordiné la implementación de infraestructura
+          eléctrica en proyectos, garantizando el cumplimiento de las normativas aplicables.
+        </p>
+        <div class="tag-list">
+          <span class="tag">TVR select</span>
+          <span class="tag">Revit</span>
+          <span class="tag">AutoCAD</span>
+          <span class="tag">Hap</span>
+        </div>
+      </div>
+
+      <!-- Experiencia 3: más antigua -->
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">ABRIL 2023 - NOVIEMBRE 2023</div>
+        <div class="timeline-role">Técnico Auxiliar</div>
+        <div class="timeline-company">ESIME Culhuacán · Ciudad de México</div>
+        <p class="timeline-desc">
+          Brindé soporte administrativo a usuarios, gestioné bases de datos y apoyé en
+          mantenimiento general, optimizando tiempos de consulta y asegurando el correcto
+          funcionamiento de las instalaciones.
+        </p>
+        <!-- Sin chips porque no aplica tecnología específica -->
+      </div>
+
+    </div><!-- /timeline -->
+  </div>
+</section><!-- /#experiencia -->
+
+
+<!-- ════════════════════════════════════════════════════════
+     EDUCACIÓN (#educacion) — Formación académica en tarjetas
+     · Fondo: --bg (alternando con #experiencia para contraste)
+     · .edu-grid: grid responsive (auto-fill de mínimo 290px)
+     · Cada .edu-card contiene:
+         .edu-icon   → emoji decorativo
+         .edu-degree → nombre del título/programa
+         .edu-school → institución
+         .edu-year   → rango de años
+         p.edu-desc  → descripción breve
+     · Las tarjetas tienen una línea degradada al fondo (::before)
+       y suben ligeramente al hacer hover
+════════════════════════════════════════════════════════ -->
+<section id="educacion">
+  <div class="container">
+
+    <!-- Encabezado de sección -->
+    <div class="reveal">
+      <p class="section-label">// 04. EDUCACIÓN</p>
+      <h2 class="section-title">Formación académica</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <!-- Grid de tarjetas de educación -->
+    <div class="edu-grid">
+
+      <!-- Tarjeta 1: Carrera universitaria -->
+      <div class="edu-card reveal">
+        <div class="edu-icon">🎓</div>
+        <div class="edu-degree">Ingeniería Mecánica</div>
+        <div class="edu-school">Instituto Politécnico Nacional</div>
+        <div class="edu-year">2019 – 2023</div>
+        <p class="edu-desc">
+          Formación enfocada en lógica matemática, resolución de problemas y gestión de
+          proyectos, fortaleciendo habilidades en pensamiento analítico, optimización de
+          procesos y trabajo estructurado.
+        </p>
+      </div>
+
+      <!-- Tarjeta 2: Bootcamp de desarrollo -->
+      <div class="edu-card reveal">
+        <div class="edu-icon">🎓</div>
+        <div class="edu-degree">Desarrollador Java Full Stack</div>
+        <div class="edu-school">Generation México</div>
+        <div class="edu-year">2026 - 2026</div>
+        <p class="edu-desc">
+          Programa enfocado en desarrollo Full Stack con Java, fortaleciendo habilidades
+          en Spring Boot, bases de datos, APIs REST, JavaScript y desarrollo de interfaces
+          web modernas.
+        </p>
+      </div>
+
+    </div><!-- /edu-grid -->
+  </div>
+</section><!-- /#educacion -->
+
+
+<!-- ════════════════════════════════════════════════════════
+     PROYECTOS (#proyectos) — Proyectos destacados en tarjetas
+     · Fondo: --surface con bordes (mismo patrón que #experiencia)
+     · .projects-grid: grid responsive (auto-fill de mínimo 310px)
+     · Cada .project-card contiene:
+         .project-header → nombre del proyecto + íconos de links
+         .project-body   → descripción + chips de tecnologías
+     · Los íconos ⌥ y ↗ son links al repo de GitHub y al demo
+       (actualmente apuntan a "#", deben actualizarse con URLs reales)
+════════════════════════════════════════════════════════ -->
+<section id="proyectos">
+  <div class="container">
+
+    <!-- Encabezado de sección -->
+    <div class="reveal">
+      <p class="section-label">// 05. PROYECTOS</p>
+      <h2 class="section-title">Trabajo destacado</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <!-- Grid de tarjetas de proyectos -->
+    <div class="projects-grid">
+
+      <!-- Proyecto 1: Landing page de Hackathon -->
+      <div class="project-card reveal">
+        <div class="project-header">
+          <span class="project-title">Hackaton — Landing page</span>
+          <div class="project-links">
+            <a href="#" title="Ver código en GitHub">⌥</a><!-- ícono de repositorio -->
+            <a href="#" title="Ver demo en vivo">↗</a><!-- ícono de enlace externo -->
+          </div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">
+            Desarrollo de una landing page para productos deportivos, implementando una
+            interfaz moderna, intuitiva e interactiva, enfocada en una navegación fluida
+            y una experiencia visual atractiva para el usuario.
+          </p>
+          <!-- Chips de tecnologías del proyecto -->
+          <div class="tag-list">
+            <span class="tag">HTML</span>
+            <span class="tag">CSS</span>
+            <span class="tag">JS</span>
+            <span class="tag">Git & GitHub</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Proyecto 2: eCommerce TINTA BRAVA -->
+      <div class="project-card reveal">
+        <div class="project-header">
+          <span class="project-title">eCommerce — TINTA BRAVA</span>
+          <div class="project-links">
+            <a href="#" title="Ver código en GitHub">⌥</a>
+            <a href="#" title="Ver demo en vivo">↗</a>
+          </div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">
+            Creación de una plataforma eCommerce completa enfocada en estampado y venta
+            de ropa personalizada, desarrollando tanto la arquitectura backend como la
+            interfaz frontend.
+          </p>
+          <div class="tag-list">
+            <span class="tag">Figma</span>
+            <span class="tag">Bootstrap</span>
+            <span class="tag">Jira</span>
+            <span class="tag">Java</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /projects-grid -->
+  </div>
+</section><!-- /#proyectos -->
+
+
+<!-- ════════════════════════════════════════════════════════
+     CONTACTO (#contacto) — Formulario de contacto centrado
+     · Fondo: --bg
+     · El formulario está limitado a max-width: 680px y centrado
+     · Campos:
+         Nombre   → texto libre, requerido
+         Email    → valida formato email, requerido
+         Asunto   → texto libre, opcional
+         Mensaje  → textarea expandible verticalmente
+     · El botón llama a handleSubmit() definido en script.js
+       que simula el envío y muestra confirmación visual
+════════════════════════════════════════════════════════ -->
+<section id="contacto">
+  <div class="container">
+
+    <!-- Encabezado de sección -->
+    <div class="reveal">
+      <p class="section-label">// 06. CONTACTO</p>
+      <h2 class="section-title">Contáctame</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <!-- Contenedor centrado del formulario -->
+    <div class="contact-form-wrap reveal">
+      <!--
+        onsubmit="handleSubmit(event)" intercepta el envío del formulario,
+        previene la recarga de página y muestra feedback visual al usuario.
+      -->
+      <form class="contact-form" onsubmit="handleSubmit(event)">
+
+        <!-- Fila con dos columnas: Nombre y Email -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" placeholder="Tu nombre completo" required/>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" placeholder="tu@correo.com" required/>
+          </div>
+        </div>
+
+        <!-- Campo asunto (ancho completo) -->
+        <div class="form-group">
+          <label>Asunto</label>
+          <input type="text" placeholder="¿En qué puedo ayudarte?"/>
+        </div>
+
+        <!-- Área de texto para el mensaje -->
+        <div class="form-group">
+          <label>Mensaje</label>
+          <textarea placeholder="Cuéntame sobre tu proyecto..."></textarea>
+        </div>
+
+        <!-- Botón de envío; el id permite modificarlo desde JS -->
+        <button type="submit" class="form-submit" id="submitBtn">
+          Enviar mensaje →
+        </button>
+
+      </form>
+    </div><!-- /contact-form-wrap -->
+
+  </div>
+</section><!-- /#contacto -->
+
+
+<!-- ════════════════════════════════════════════════════════
+     FOOTER — Pie de página
+     · Tres columnas en desktop, apiladas en móvil:
+         1. Marca: nombre + rol del desarrollador
+         2. Navegación: links ancla a las secciones principales
+         3. Redes sociales: GitHub y LinkedIn con SVG inline
+     · .footer-bottom: línea inferior con copyright
+     · Los SVG de GitHub y LinkedIn están inline para no depender
+       de una librería de iconos extra y poder colorearlos con CSS
+════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+
+    <!-- COLUMNA 1: Identidad del desarrollador -->
+    <div>
+      <div class="footer-name">Fernando Zamudio</div>
+      <div class="footer-role">Desarrollador Java</div>
+    </div>
+
+    <!-- COLUMNA 2: Links de navegación rápida -->
+    <div>
+      <p class="footer-nav-title">Navegación</p>
+      <ul class="footer-nav">
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#proyectos">Proyectos</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </div>
+
+    <!-- COLUMNA 3: Botones de redes sociales -->
+    <div class="footer-social">
+      <p class="footer-nav-title">Redes</p>
+      <div class="social-links">
+
+        <!-- Botón GitHub -->
+        <a href="https://github.com/FerZamu-byte"
+           target="_blank" rel="noopener"
+           class="social-link" title="GitHub">
+          <!-- Ícono SVG de GitHub (path del logo octocat) -->
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z"/>
+          </svg>
+        </a>
+
+        <!-- Botón LinkedIn -->
+        <a href="https://www.linkedin.com/in/fernando-antonio-zamudio-olguin/"
+           target="_blank" rel="noopener"
+           class="social-link" title="LinkedIn">
+          <!-- Ícono SVG de LinkedIn -->
+          <svg viewBox="0 0 24 24">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+          </svg>
+        </a>
+
+      </div><!-- /social-links -->
+    </div><!-- /footer-social -->
+
+  </div><!-- /footer-inner -->
+
+  <!-- Barra inferior con copyright -->
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 Fernando Zamudio. Todos los derechos reservados.</p>
+  </div>
+
+</footer><!-- /footer -->
+
+
+<!--
+  SCRIPT PRINCIPAL
+  Se coloca al final del <body> para que el DOM esté completamente
+  cargado antes de que JavaScript intente acceder a los elementos.
+-->
+<script src="./script.js"></script>
+
+</body>
+</html>

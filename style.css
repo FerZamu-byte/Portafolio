@@ -1,0 +1,1057 @@
+/*
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  STYLE.CSS — Hoja de estilos principal del portafolio        ║
+  ║                                                              ║
+  ║  Índice de secciones:                                        ║
+  ║    1.  Variables globales (Design Tokens)                    ║
+  ║    2.  Reset y estilos base                                  ║
+  ║    3.  Scrollbar y selección de texto                        ║
+  ║    4.  Navbar                                                ║
+  ║    5.  Hero (#inicio)                                        ║
+  ║    6.  Secciones base (compartido por todas)                 ║
+  ║    7.  Acerca de (#acerca)                                   ║
+  ║    8.  Skills (#skills)                                      ║
+  ║    9.  Experiencia (#experiencia)                            ║
+  ║   10.  Educación (#educacion)                                ║
+  ║   11.  Proyectos (#proyectos)                                ║
+  ║   12.  Contacto (#contacto)                                  ║
+  ║   13.  Footer                                                ║
+  ║   14.  Keyframes (animaciones)                               ║
+  ║   15.  Responsive (media queries)                            ║
+  ╚══════════════════════════════════════════════════════════════╝
+*/
+
+
+/* ════════════════════════════════════════════════════════════════
+   1. VARIABLES GLOBALES — Design Tokens (paleta teal)
+   Se definen en :root para estar disponibles en todo el documento.
+   Usar variables permite cambiar la paleta desde un solo lugar.
+
+   Paleta de colores base:
+     C1 #0b2b27 → teal muy oscuro  (fondos profundos)
+     C2 #0f4d3c → teal oscuro      (superficies de tarjetas)
+     C3 #3a9b87 → teal medio       (acento principal)
+     C4 #aad8d0 → menta claro      (acento secundario, textos en teal)
+════════════════════════════════════════════════════════════════ */
+:root {
+  /* Fondos */
+  --bg:        #081f1c;  /* fondo principal (el más oscuro) */
+  --surface:   #0b2b27;  /* fondo de secciones alternativas y navbar */
+  --card:      #0f3830;  /* fondo de tarjetas (edu, project, di-card) */
+  --border:    #1a5a4a;  /* color de bordes de tarjetas y separadores */
+
+  /* Colores de acento */
+  --accent:    #3a9b87;  /* teal medio — botones, dots, iconos activos */
+  --accent2:   #aad8d0;  /* menta claro — apellido en hero, fechas, chips */
+  --accent3:   #0f4d3c;  /* teal oscuro — uso secundario decorativo */
+  --muted:     #4a8878;  /* gris-teal — textos secundarios y placeholders */
+
+  /* Tipografía */
+  --text:      #c2e8e2;  /* color del texto de párrafos */
+  --heading:   #eaf7f5;  /* color del texto de títulos y encabezados */
+
+  /* Gradientes */
+  --grad-hero: linear-gradient(150deg, #081f1c 0%, #0b2b27 40%, #0f4d3c 100%);
+  --grad-a:    linear-gradient(135deg, #3a9b87, #aad8d0); /* divisores y barras */
+
+  /* Fuentes */
+  --mono:    'JetBrains Mono', monospace;          /* textos técnicos, labels */
+  --sans:    'Syne', sans-serif;                   /* texto general del cuerpo */
+  --display: 'Playfair Display', Georgia, serif;   /* títulos serif elegantes */
+
+  /* Utilidades */
+  --r:  10px;                          /* border-radius estándar de tarjetas */
+  --sh: 0 8px 40px rgba(6,8,24,.55);  /* sombra estándar para tarjetas/formulario */
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   2. RESET Y ESTILOS BASE
+   · box-sizing: border-box hace que padding y border queden
+     dentro del ancho/alto declarado (evita desbordamientos)
+   · Se eliminan márgenes y paddings por defecto de todos los elementos
+   · scroll-behavior: smooth activa el desplazamiento suave al usar
+     los links de navegación (href="#section")
+   · overflow-x: hidden evita scroll horizontal por elementos
+     que sobresalen ligeramente en mobile
+════════════════════════════════════════════════════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth; /* desplazamiento animado entre secciones */
+}
+
+body {
+  background: var(--bg);          /* fondo principal oscuro */
+  color: var(--text);             /* color de texto base */
+  font-family: var(--sans);       /* fuente general (Syne) */
+  overflow-x: hidden;             /* sin scroll horizontal */
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   3. SCROLLBAR PERSONALIZADA Y SELECCIÓN DE TEXTO
+   · ::-webkit-scrollbar afecta Chrome, Edge y Safari
+   · La barra es delgada (5px) con el color de acento teal
+   · ::selection cambia el color del texto seleccionado con cursor
+════════════════════════════════════════════════════════════════ */
+::-webkit-scrollbar        { width: 5px; }
+::-webkit-scrollbar-track  { background: var(--bg); }    /* pista oscura */
+::-webkit-scrollbar-thumb  { background: var(--accent); border-radius: 99px; } /* deslizador teal */
+
+::selection {
+  background: var(--accent); /* fondo teal al seleccionar texto */
+  color: var(--bg);          /* texto oscuro para contraste */
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   4. NAVBAR — Barra de navegación fija
+   · position: fixed + inset: 0 0 auto 0 la ancla al tope de pantalla
+   · z-index: 999 asegura que quede sobre todo el contenido
+   · backdrop-filter: blur() crea el efecto "vidrio esmerilado"
+   · La clase ".scrolled" se agrega por JS cuando el usuario hace
+     scroll, activando el borde inferior visible
+════════════════════════════════════════════════════════════════ */
+nav {
+  position: fixed;
+  inset: 0 0 auto 0;        /* top:0, right:0, bottom:auto, left:0 */
+  z-index: 999;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+  background: rgba(6,8,24,.72);   /* fondo semitransparente */
+  backdrop-filter: blur(20px);    /* desenfoque del contenido detrás */
+  border-bottom: 1px solid transparent; /* invisible por defecto */
+  transition: border-color .3s;
+}
+
+/* Al hacer scroll, JS agrega .scrolled → borde inferior visible */
+nav.scrolled {
+  border-color: var(--border);
+}
+
+/* Lista de links: horizontal con espaciado */
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+/* Estilo base de cada link de navegación */
+.nav-links a {
+  font-family: var(--mono);
+  font-size: .78rem;
+  color: var(--muted);        /* color apagado por defecto */
+  text-decoration: none;
+  letter-spacing: .06em;
+  position: relative;         /* necesario para el ::after (subrayado) */
+  transition: color .2s;
+}
+
+/* Subrayado animado debajo del link (crece de 0 a 100% al hover) */
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;                   /* inicia oculto */
+  height: 1px;
+  background: var(--accent);
+  transition: width .3s;      /* animación de izquierda a derecha */
+}
+
+/* Estado hover y link activo (sección actual visible) */
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--accent);       /* teal al pasar el cursor */
+}
+.nav-links a:hover::after,
+.nav-links a.active::after {
+  width: 100%;                /* subrayado completo */
+}
+
+/* Botón hamburguesa (solo visible en mobile) */
+.hamburger {
+  display: none;              /* oculto en desktop */
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+/* Cada línea del ícono hamburguesa */
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 99px;
+  transition: .3s;
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   5. HERO (#inicio) — Sección de presentación
+   · min-height: 100vh → ocupa toda la pantalla visible
+   · El pseudo-elemento ::before crea la cuadrícula decorativa
+     de fondo usando background-image con gradientes lineales
+   · Los .glow son círculos con blur para luz ambiental
+   · .hero-inner es un grid de dos columnas: texto | foto
+════════════════════════════════════════════════════════════════ */
+#inicio {
+  min-height: 100vh;
+  background: var(--grad-hero);   /* degradado teal oscuro */
+  display: flex;
+  align-items: center;
+  padding: 100px 2.5rem 4rem;     /* 100px top para no quedar bajo el navbar */
+  position: relative;
+  overflow: hidden;               /* evita que los glows creen scroll */
+}
+
+/* Cuadrícula decorativa semitransparente sobre el hero */
+#inicio::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* Dos gradientes superpuestos crean líneas horizontales y verticales */
+  background-image:
+    linear-gradient(rgba(58,155,135,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(58,155,135,.07) 1px, transparent 1px);
+  background-size: 56px 56px;
+  /* mask-image hace que la cuadrícula se desvanezca en los bordes */
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 20%, transparent 80%);
+}
+
+/* Estilos base de los círculos de luz ambiental */
+.glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);    /* desenfoque extremo → efecto de halo */
+  pointer-events: none;  /* no interfiere con clics del usuario */
+}
+/* Glow 1: grande, arriba-derecha, teal oscuro */
+.glow-1 { width: 600px; height: 600px; background: rgba(15,77,60,.45);   top: -150px; right: -100px; }
+/* Glow 2: mediano, abajo-izquierda, teal medio */
+.glow-2 { width: 450px; height: 450px; background: rgba(58,155,135,.2);  bottom: -100px; left: -50px; }
+/* Glow 3: pequeño, centro, menta claro muy sutil */
+.glow-3 { width: 300px; height: 300px; background: rgba(170,216,208,.1); top: 30%; left: 22%; }
+
+/* Grid principal del hero: texto a la izquierda, foto a la derecha */
+.hero-inner {
+  position: relative;
+  z-index: 2;                              /* sobre el ::before y los glows */
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 400px;        /* col texto flexible | col foto 400px */
+  gap: 4rem;
+  align-items: center;
+}
+
+/* Columna de texto: entra con animación fadeUp al cargar */
+.hero-text {
+  animation: fadeUp .8s ease both;
+}
+
+/* El ::before del .hero-tag es el punto pulsante antes del texto */
+.hero-tag::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent2);
+  animation: pulse 2s infinite; /* parpadeo de halo */
+}
+
+/* Nombre principal — fuente serif elegante, tamaño fluido con clamp() */
+.hero-name {
+  font-family: var(--display);                          /* Playfair Display */
+  font-size: clamp(2.8rem, 6vw, 5.8rem);                /* mínimo 2.8rem, máximo 5.8rem */
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--heading);
+  letter-spacing: -.01em;
+  margin-bottom: .5rem;
+  white-space: nowrap;   /* evita que el nombre se parta en dos líneas */
+}
+
+/* "Zamudio" en color menta claro para contraste con "Fernando" */
+.hero-name .accent-word {
+  color: var(--accent2);
+  font-weight: 800;
+}
+
+/* Subtítulo del rol (typing effect) */
+.hero-role {
+  font-family: var(--mono);
+  font-size: clamp(.9rem, 1.8vw, 1.15rem);
+  color: var(--muted);
+  letter-spacing: .05em;
+  margin-bottom: 1.5rem;
+}
+
+/* Cursor parpadeante del efecto de escritura */
+.hero-role .cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: var(--accent);
+  margin-left: 2px;
+  animation: blink 1s step-end infinite; /* parpadeo step (on/off) */
+  vertical-align: middle;
+}
+
+/* Párrafo de descripción breve */
+.hero-desc {
+  font-size: 1rem;
+  line-height: 1.78;
+  color: var(--text);
+  max-width: 500px;
+  margin-bottom: 2.25rem;
+}
+
+/* Contenedor de botones CTA */
+.hero-btns {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap; /* en pantallas muy pequeñas apila los botones */
+}
+
+/* Botón primario: fondo sólido teal */
+.btn-primary {
+  padding: .75rem 1.75rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  font-family: var(--mono);
+  font-size: .82rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  border-radius: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .2s, box-shadow .2s;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);                        /* sube levemente */
+  box-shadow: 0 8px 28px rgba(58,155,135,.45);        /* sombra teal */
+}
+
+/* Botón secundario: solo borde, sin fondo */
+.btn-outline {
+  padding: .75rem 1.75rem;
+  background: transparent;
+  color: var(--accent2);
+  border: 1px solid rgba(58,155,135,.5);
+  font-family: var(--mono);
+  font-size: .82rem;
+  letter-spacing: .04em;
+  border-radius: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+}
+.btn-outline:hover {
+  background: rgba(58,155,135,.12);  /* fondo sutil al hover */
+  border-color: var(--accent2);
+}
+
+/* ── Marco de fotografía ── */
+.hero-photo {
+  animation: fadeUp .8s .18s ease both; /* pequeño delay respecto al texto */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+/* Contenedor de la imagen: borde punteado decorativo */
+.photo-frame {
+  width: 320px;
+  height: 370px;
+  border-radius: 22px;
+  border: 2px dashed rgba(58,155,135,.4);
+  background: rgba(58,155,135,.05);         /* fondo muy sutil si no hay imagen */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .75rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .3s, box-shadow .3s;
+}
+.photo-frame:hover {
+  border-color: var(--accent2);
+  box-shadow: 0 0 40px rgba(58,155,135,.2);
+}
+
+/* La imagen llena completamente el marco sin deformarse */
+.photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   /* recorta si es necesario para mantener proporciones */
+  border-radius: 20px;
+  display: block;
+}
+
+/* Si existe un <img> dentro del marco, ocultar los placeholders */
+.photo-frame img ~ .ph-icon,
+.photo-frame img ~ .ph-text { display: none; }
+
+/* Ícono y texto de placeholder (cuando no hay imagen) */
+.ph-icon { font-size: 3.8rem; opacity: .3; user-select: none; }
+.ph-text {
+  font-family: var(--mono);
+  font-size: .7rem;
+  color: var(--muted);
+  letter-spacing: .1em;
+  text-align: center;
+  line-height: 1.7;
+}
+
+/* Decoración de esquinas sobre el marco */
+.photo-corner { position: absolute; }
+
+/* ── Indicador de scroll ── */
+.scroll-indicator {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);  /* centrado horizontal */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5rem;
+  font-family: var(--mono);
+  font-size: .62rem;
+  color: var(--muted);
+  letter-spacing: .1em;
+  animation: fadeIn 1.5s 1s both; /* aparece 1s después del load */
+}
+
+/* El "ratón" es un rectángulo con bordes redondeados */
+.scroll-indicator .mouse {
+  width: 20px;
+  height: 34px;
+  border: 1.5px solid var(--muted);
+  border-radius: 12px;
+  position: relative;
+}
+
+/* La bolita dentro del ratón que se desplaza hacia abajo */
+.scroll-indicator .mouse::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 99px;
+  animation: scrollDown 1.8s ease infinite; /* sube y baja en bucle */
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   6. SECCIONES BASE — Estilos compartidos por todas las secciones
+   · section: padding uniforme vertical y horizontal
+   · .container: limita el ancho y centra el contenido
+   · .section-label: texto pequeño en mono con numeración "//"
+   · .section-title: título serif grande con clamp() para fluidez
+   · .section-divider: línea decorativa degradada bajo el título
+   · .reveal: clase de animación de entrada (controlada por JS)
+════════════════════════════════════════════════════════════════ */
+section {
+  padding: 6rem 2.5rem;
+}
+
+/* Limita el ancho máximo del contenido y lo centra */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Label pequeño sobre el título: "// 01. ACERCA DE" */
+.section-label {
+  font-family: var(--mono);
+  font-size: .7rem;
+  color: var(--accent);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  margin-bottom: .6rem;
+}
+
+/* Título principal de cada sección — Playfair Display serif */
+.section-title {
+  font-family: var(--display);
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem); /* fluido entre 1.8 y 2.8rem */
+  font-weight: 800;
+  color: var(--heading);
+  letter-spacing: -.01em;
+  margin-bottom: 1rem;
+}
+
+/* Línea decorativa corta bajo el título */
+.section-divider {
+  width: 44px;
+  height: 2px;
+  background: var(--grad-a);   /* degradado teal → menta */
+  margin-bottom: 3rem;
+}
+
+/* Estado inicial de elementos con animación de entrada */
+.reveal {
+  opacity: 0;                    /* invisible */
+  transform: translateY(28px);   /* desplazado hacia abajo */
+  transition: opacity .6s ease, transform .6s ease;
+}
+/* JS agrega .visible cuando el elemento entra en el viewport */
+.reveal.visible {
+  opacity: 1;
+  transform: none;               /* vuelve a posición original */
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   7. ACERCA DE (#acerca) — Solo texto
+   · Fondo --surface (ligeramente más claro que --bg) con bordes
+   · Los párrafos tienen un ancho máximo para legibilidad óptima
+════════════════════════════════════════════════════════════════ */
+#acerca {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.about-text p {
+  font-size: 1.05rem;
+  line-height: 1.85;            /* interlineado amplio para legibilidad */
+  color: var(--text);
+  margin-bottom: 1.3rem;
+  max-width: 780px;             /* limita el ancho para no ser difícil de leer */
+}
+.about-text p:last-of-type {
+  margin-bottom: 0;
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   8. SKILLS (#skills) — Grid de iconos Devicon
+   · Fondo --bg para contrastar con #acerca
+   · .skill-categories: columna vertical de grupos
+   · .skill-group-title: label con línea horizontal que se extiende
+   · .devicon-grid: grid responsivo de tarjetas
+   · .di-card: tarjeta individual con ícono + nombre
+════════════════════════════════════════════════════════════════ */
+#skills { background: var(--bg); }
+
+/* Contenedor de todos los grupos de skills (Backend, Frontend...) */
+.skill-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+/* Título del grupo con línea decorativa a la derecha */
+.skill-group-title {
+  font-family: var(--mono);
+  font-size: .72rem;
+  color: var(--accent);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+/* La línea que se extiende hasta el borde derecho */
+.skill-group-title::after {
+  content: '';
+  flex: 1;                    /* ocupa todo el espacio disponible */
+  height: 1px;
+  background: linear-gradient(90deg, var(--border), transparent);
+}
+
+/* Grid de tarjetas de iconos: auto-fill crea tantas columnas como quepan */
+.devicon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 1rem;
+}
+
+/* Tarjeta individual de skill */
+.di-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 1.2rem .75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .55rem;
+  transition: border-color .25s, transform .25s, box-shadow .25s;
+}
+/* Al hover: borde teal, sube y agrega sombra */
+.di-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 28px rgba(58,155,135,.2);
+}
+/* Ícono de Devicon */
+.di-card i {
+  font-size: 2.3rem;
+  line-height: 1;
+  display: block;
+  transition: transform .25s;
+}
+/* El ícono crece ligeramente al hover */
+.di-card:hover i { transform: scale(1.1); }
+/* Nombre de la tecnología */
+.di-card span {
+  font-family: var(--mono);
+  font-size: .66rem;
+  color: var(--muted);
+  letter-spacing: .04em;
+  text-align: center;
+  line-height: 1.3;
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   9. EXPERIENCIA (#experiencia) — Timeline vertical
+   · Fondo --surface con bordes (mismo patrón que #acerca)
+   · .timeline: contenedor con línea vertical izquierda (degradado)
+   · .timeline-item: cada entrada laboral con punto en la línea
+   · .timeline-dot: círculo posicionado en la línea vertical
+   · .tag: chip pequeño de tecnologías con borde redondeado
+════════════════════════════════════════════════════════════════ */
+#experiencia {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Contenedor del timeline con la línea vertical como ::before */
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+/* Línea vertical decorativa (degradado que se desvanece abajo) */
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg, var(--accent), var(--accent2), transparent);
+}
+
+/* Cada item del timeline */
+.timeline-item {
+  position: relative;
+  margin-bottom: 3rem;
+  padding-left: 2rem;
+}
+.timeline-item:last-child { margin-bottom: 0; }
+
+/* Punto circular sobre la línea vertical */
+.timeline-dot {
+  position: absolute;
+  left: -2.5rem;           /* centrado sobre la línea */
+  top: .35rem;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg);                     /* separación del fondo */
+  box-shadow: 0 0 0 3px rgba(58,155,135,.3);        /* halo exterior sutil */
+}
+
+/* Textos del item */
+.timeline-date    { font-family: var(--mono); font-size: .7rem; color: var(--accent2); letter-spacing: .1em; margin-bottom: .4rem; }
+.timeline-role    { font-family: var(--sans); font-size: 1.2rem; font-weight: 700; color: var(--heading); margin-bottom: .2rem; }
+.timeline-company { font-family: var(--mono); font-size: .8rem; color: var(--muted); margin-bottom: .85rem; }
+.timeline-desc    { font-size: .95rem; line-height: 1.75; color: var(--text); }
+
+/* Contenedor de chips de tecnologías */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+  margin-top: .85rem;
+}
+
+/* Chip individual */
+.tag {
+  font-family: var(--mono);
+  font-size: .68rem;
+  padding: .22rem .65rem;
+  background: rgba(58,155,135,.1);
+  border: 1px solid rgba(58,155,135,.25);
+  color: var(--accent2);
+  border-radius: 99px;
+  letter-spacing: .04em;
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   10. EDUCACIÓN (#educacion) — Grid de tarjetas
+    · Fondo --bg (alternando con #experiencia)
+    · auto-fill crea columnas de mínimo 290px
+    · Cada tarjeta tiene una línea degradada al fondo (::before)
+    · Al hover la tarjeta sube ligeramente
+════════════════════════════════════════════════════════════════ */
+#educacion { background: var(--bg); }
+
+/* Grid responsivo */
+.edu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1.4rem;
+}
+
+/* Tarjeta de educación */
+.edu-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .3s, transform .3s;
+}
+.edu-card:hover {
+  border-color: var(--accent2);
+  transform: translateY(-4px);  /* efecto de elevación */
+}
+/* Línea degradada al fondo de la tarjeta */
+.edu-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--grad-a);
+}
+
+/* Textos de la tarjeta */
+.edu-icon   { font-size: 2.1rem; margin-bottom: .9rem; }
+.edu-degree { font-family: var(--sans); font-size: 1.05rem; font-weight: 700; color: var(--heading); margin-bottom: .3rem; }
+.edu-school { font-family: var(--mono); font-size: .78rem; color: var(--accent2); margin-bottom: .3rem; }
+.edu-year   { font-family: var(--mono); font-size: .7rem; color: var(--muted); }
+.edu-desc   { font-size: .88rem; line-height: 1.7; color: var(--text); margin-top: .85rem; }
+
+
+/* ════════════════════════════════════════════════════════════════
+   11. PROYECTOS (#proyectos) — Grid de tarjetas de proyecto
+    · Fondo --surface con bordes (patrón alternado)
+    · Cada tarjeta tiene header (nombre + links) y body (desc + tags)
+    · Los links ⌥ y ↗ deben apuntar al repo y al demo respectivamente
+════════════════════════════════════════════════════════════════ */
+#proyectos {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Grid responsivo de proyectos */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 1.6rem;
+}
+
+/* Tarjeta de proyecto */
+.project-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color .3s, transform .3s;
+}
+.project-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-5px);
+}
+
+/* Cabecera: nombre del proyecto + links a repo/demo */
+.project-header {
+  padding: 1.4rem 1.6rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.project-title  { font-family: var(--mono); font-size: .88rem; color: var(--accent); font-weight: 600; }
+.project-links  { display: flex; gap: .65rem; }
+.project-links a { color: var(--muted); text-decoration: none; font-size: .95rem; transition: color .2s; }
+.project-links a:hover { color: var(--accent); }
+
+/* Cuerpo: descripción + chips de tecnologías */
+.project-body { padding: 1.4rem 1.6rem; flex: 1; }
+.project-desc { font-size: .9rem; line-height: 1.7; color: var(--text); margin-bottom: 1.1rem; }
+
+
+/* ════════════════════════════════════════════════════════════════
+   12. CONTACTO (#contacto) — Formulario centrado
+    · Fondo --bg
+    · El formulario está limitado a 680px de ancho
+    · .form-row: dos columnas para Nombre y Email
+    · El botón .form-submit cambia a verde al ser activado (JS)
+════════════════════════════════════════════════════════════════ */
+#contacto { background: var(--bg); }
+
+/* Centra el formulario y limita su ancho */
+.contact-form-wrap {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* Tarjeta del formulario */
+.contact-form {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  box-shadow: var(--sh);
+}
+
+/* Fila de dos columnas (Nombre | Email) */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Grupo label + input */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: .45rem;
+}
+
+/* Labels pequeños en mayúsculas */
+label {
+  font-family: var(--mono);
+  font-size: .68rem;
+  color: var(--muted);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+/* Campos de texto */
+input, textarea {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--heading);
+  font-family: var(--mono);
+  font-size: .85rem;
+  padding: .85rem 1rem;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color .3s;
+  resize: none;                   /* evita que el usuario redimensione */
+}
+/* Borde teal al enfocar el campo */
+input:focus, textarea:focus { border-color: var(--accent); }
+input::placeholder, textarea::placeholder { color: var(--muted); }
+textarea { min-height: 130px; }
+
+/* Botón de envío */
+.form-submit {
+  padding: .85rem 2rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  font-family: var(--mono);
+  font-size: .85rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  border-radius: 6px;
+  cursor: pointer;
+  align-self: flex-start;         /* no ocupa todo el ancho */
+  transition: transform .2s, box-shadow .2s;
+}
+.form-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(58,155,135,.4);
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   13. FOOTER — Pie de página
+    · Fondo --surface con borde superior
+    · .footer-inner: tres columnas (marca | nav | redes)
+    · .footer-bottom: barra inferior con copyright
+    · Los íconos SVG de GitHub/LinkedIn se colorean con fill:currentColor
+════════════════════════════════════════════════════════════════ */
+footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 3.5rem 2.5rem 2.5rem;
+}
+
+/* Contenedor de las tres columnas */
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;              /* en mobile apila las columnas */
+  gap: 2rem;
+}
+
+/* Nombre del desarrollador (Playfair Display) */
+.footer-name { font-family: var(--display); font-size: 1.55rem; font-weight: 800; color: var(--heading); letter-spacing: -.02em; margin-bottom: .3rem; }
+/* Rol debajo del nombre */
+.footer-role { font-family: var(--mono); font-size: .75rem; color: var(--accent); letter-spacing: .12em; text-transform: uppercase; }
+
+/* Título de columna ("Navegación", "Redes") */
+.footer-nav-title { font-family: var(--mono); font-size: .68rem; color: var(--muted); letter-spacing: .15em; text-transform: uppercase; margin-bottom: 1rem; }
+
+/* Lista de links de navegación del footer */
+.footer-nav { list-style: none; display: flex; flex-direction: column; gap: .55rem; }
+.footer-nav a { font-family: var(--mono); font-size: .8rem; color: var(--text); text-decoration: none; transition: color .2s; }
+.footer-nav a:hover { color: var(--accent); }
+
+/* Columna de redes sociales */
+.footer-social { display: flex; flex-direction: column; align-items: flex-end; gap: 1rem; }
+.social-links  { display: flex; gap: .75rem; }
+
+/* Botón cuadrado de red social */
+.social-link {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  text-decoration: none;
+  transition: border-color .3s, color .3s, transform .3s;
+}
+.social-link:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-3px);
+}
+/* El SVG hereda el color del contenedor (.social-link) */
+.social-link svg { width: 18px; height: 18px; fill: currentColor; }
+
+/* Barra de copyright */
+.footer-bottom {
+  max-width: 1100px;
+  margin: 2.25rem auto 0;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.footer-copy, .footer-badge { font-family: var(--mono); font-size: .7rem; color: var(--muted); }
+
+
+/* ════════════════════════════════════════════════════════════════
+   14. KEYFRAMES — Definición de animaciones
+   · fadeUp:     entrada desde abajo (usado en hero)
+   · fadeIn:     aparición simple (usado en scroll indicator)
+   · blink:      parpadeo del cursor de escritura
+   · pulse:      halo pulsante del punto en .hero-tag
+   · scrollDown: movimiento de la bolita en el indicador de scroll
+════════════════════════════════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(36px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes blink {
+  50% { opacity: 0; }  /* cursor: visible → invisible → visible */
+}
+@keyframes pulse {
+  0%,100% { box-shadow: 0 0 0 0   rgba(170,216,208,.5); }
+  50%      { box-shadow: 0 0 0 5px rgba(170,216,208,0); }  /* halo se expande */
+}
+@keyframes scrollDown {
+  0%   { opacity: 1; transform: translateX(-50%) translateY(0); }
+  80%  { opacity: 0; transform: translateX(-50%) translateY(10px); }  /* baja y desaparece */
+  100% { opacity: 0; transform: translateX(-50%) translateY(0); }     /* vuelve al inicio invisible */
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   15. RESPONSIVE — Media Queries
+   · @media (max-width: 900px): tablets y pantallas medianas
+     - El hero pasa de 2 columnas a 1 (texto bajo la foto)
+     - La foto sube al tope con order: -1
+   · @media (max-width: 680px): móviles
+     - Padding reducido en todo
+     - El menú de navegación se oculta y se muestra con .open
+     - Se muestra el botón hamburguesa
+     - El formulario pasa de 2 columnas a 1
+     - El footer apila sus columnas verticalmente
+════════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .hero-inner {
+    grid-template-columns: 1fr; /* una sola columna */
+  }
+  .hero-photo {
+    order: -1;                  /* la foto aparece primero (arriba del texto) */
+  }
+  .photo-frame {
+    width: 260px;
+    height: 300px;              /* se reduce el tamaño del marco */
+  }
+}
+
+@media (max-width: 680px) {
+  nav     { padding: 0 1.25rem; }
+  section { padding: 4rem 1.25rem; }
+
+  /* Menú oculto por defecto en mobile, visible con clase .open */
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    position: fixed;              /* cubre la pantalla desde el navbar */
+    top: 64px;
+    left: 0; right: 0;
+    background: var(--surface);
+    padding: 1.4rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    gap: 1.1rem;
+  }
+  .nav-links.open { display: flex; }   /* JS agrega/quita esta clase */
+
+  .hamburger      { display: flex; }   /* visible en mobile */
+
+  /* Formulario: una columna en móvil */
+  .form-row       { grid-template-columns: 1fr; }
+
+  /* Footer apilado en columna */
+  .footer-inner   { flex-direction: column; }
+  .footer-social  { align-items: flex-start; }
+  .footer-bottom  { flex-direction: column; }
+
+  /* Botones CTA del hero en columna */
+  .hero-btns      { flex-direction: column; align-items: flex-start; }
+}
