@@ -785,6 +785,28 @@ section {
   transform: translateY(-5px);
 }
 
+/* ── Preview de imagen ── */
+.project-img {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  background: var(--card);        /* placeholder si no hay imagen */
+}
+
+.project-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;              /* recorta sin deformar */
+  display: block;
+  transition: transform .4s ease;
+}
+
+/* Zoom sutil al hacer hover en la tarjeta entera */
+.project-card:hover .project-img img {
+  transform: scale(1.04);
+}
+
 /* Cabecera: nombre del proyecto + links a repo/demo */
 .project-header {
   padding: 1.4rem 1.6rem;
@@ -801,8 +823,6 @@ section {
 /* Cuerpo: descripción + chips de tecnologías */
 .project-body { padding: 1.4rem 1.6rem; flex: 1; }
 .project-desc { font-size: .9rem; line-height: 1.7; color: var(--text); margin-bottom: 1.1rem; }
-
-
 /* ════════════════════════════════════════════════════════════════
    12. CONTACTO (#contacto) — Formulario centrado
     · Fondo --bg
